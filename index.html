@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine ??</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff6a88, #ff99ac);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
+
+  .container {
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+    padding: 20px;
+    z-index: 2;
+  }
+
+  h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    min-height: 90px;
+  }
+
+  button {
+    padding: 14px 38px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 30px;
+    margin: 10px;
+    cursor: pointer;
+  }
+
+  #yesBtn {
+    background: #ff2d55;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  #noBtn {
+    background: #444;
+    color: white;
+    position: absolute;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  /* Rose petals */
+  .petal {
+    position: absolute;
+    top: -30px;
+    font-size: 24px;
+    animation: fall linear infinite;
+    opacity: 0.8;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+    }
+  }
+
+  /* Confetti */
+  .confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: red;
+    animation: explode 2s ease-out forwards;
+  }
+
+  @keyframes explode {
+    to {
+      transform: translate(var(--x), var(--y)) rotate(720deg);
+      opacity: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="container" id="page1">
+  <h1 id="question"></h1>
+  <button id="yesBtn">Yes</button>
+  <button id="noBtn">No</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="container hidden" id="page2">
+  <h1>Yeah… I will pick you up at 5pm ??</h1>
+</div>
+
+<audio id="sound">
+  <source src="https://www.soundjay.com/human/kiss-01.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const text = "Sammuu Will you be my Valentine, Cara Mia? ??";
+  const question = document.getElementById("question");
+  let i = 0;
+
+  function typeText() {
+    if (i < text.length) {
+      question.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typeText, 70);
+    }
+  }
+  typeText();
+
+  // NO button escape
+  const noBtn = document.getElementById("noBtn");
+  noBtn.addEventListener("touchstart", moveNo);
+  noBtn.addEventListener("mouseover", moveNo);
+
+  function moveNo() {
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+  }
+
+  // YES button
+  const yesBtn = document.getElementById("yesBtn");
+  const page1 = document.getElementById("page1");
+  const page2 = document.getElementById("page2");
+  const sound = document.getElementById("sound");
+
+  yesBtn.addEventListener("click", () => {
+    sound.play();
+    confettiBoom();
+    setTimeout(() => {
+      page1.classList.add("hidden");
+      page2.classList.remove("hidden");
+    }, 1200);
+  });
+
+  // Rose petals generator
+  setInterval(() => {
+    const petal = document.createElement("div");
+    petal.className = "petal";
+    petal.innerHTML = "??";
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (Math.random() * 4 + 6) + "s";
+    document.body.appendChild(petal);
+    setTimeout(() => petal.remove(), 10000);
+  }, 400);
+
+  // Confetti explosion
+  function confettiBoom() {
+    for (let i = 0; i < 80; i++) {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = "50%";
+      c.style.top = "50%";
+      c.style.background = `hsl(${Math.random()*360},100%,60%)`;
+      c.style.setProperty("--x", `${(Math.random()-0.5)*300}px`);
+      c.style.setProperty("--y", `${(Math.random()-0.5)*300}px`);
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 2000);
+    }
+  }
+</script>
+
+</body>
+</html>
